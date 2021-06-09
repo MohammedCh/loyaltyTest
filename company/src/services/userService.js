@@ -9,18 +9,31 @@ function userService() {
     //     console.error(error);
     // }
 
-    async function getUserByEmail(email) {
+    async function getUserBalanceByEmail(email) {
         try {
-            const response = await axios.get('localhost:8000/getByEmail/' + email);
-            console.log("hi");
-            console.log(response.response);
+            const response = await axios.get('http://localhost:8000/getByEmail/' + email);
+            //console.log(response.data);
+            if (response) {
+                return response.data;
+            };
         } catch (error) {
             console.error(error);
         }
     }
 
+    async function addTransaction(email, receiptId, paid) {
+        try {
+            const response = await axios.post('http://localhost:8000/transaction/add', { email: email, receiptId: receiptId, paid: paid });
 
-
+            console.log(response);
+            if (response) {
+                return response;
+            };
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    //addTransaction("helloword1", "5", "200");
     //function getUserByEmail(email) {
     //     const options = {
     //         host: 'swapi.dev',
@@ -44,7 +57,7 @@ function userService() {
     //     });
     //     request.end();
     // }
-    return { getUserByEmail };
+    return { getUserBalanceByEmail, addTransaction };
 };
 
 module.exports = userService();

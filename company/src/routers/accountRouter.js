@@ -1,10 +1,7 @@
 const express = require('express');
 const debug = require('debug')('app:signUoRouter');
 const { MongoClient } = require('mongodb');
-const http = require('http');
 const userService = require('../services/userService');
-
-userService.getUserByEmail("f");
 
 const accountRouter = express.Router();
 
@@ -12,27 +9,16 @@ accountRouter.route('/').get((req, res) => {
     res.render('signIn');
 });
 
-// accountRouter.route('/account').get(async (req, res) => {
-//     try {
-//         const existingUser = await signIn(req.query.email);
-//         if (req.query.email === existingUser) {
-//             res.render('account');
-//         }
-//         else {
-//             console.log("different");
-//             res.send("User with " + req.query.email + " email doesn't exist!");
-//         };
-//     } catch (error) {
-//         debug(error.stack);
-//     }
-// });
+let email;
 
 accountRouter.post('/account', (async (req, res) => {
+    email = req.body.email;
     try {
-        console.log(req.body.email);
-        const existingUser = await signIn(req.body.email);
+        //console.log(email);
+        const existingUser = await signIn(email);
         if (req.body.email === existingUser) {
-            res.render('account');
+            const balance = await userService.getUserBalanceByEmail(email);
+            res.render('account', { email, balance: balance });
         }
         else {
             console.log("different");
@@ -43,6 +29,17 @@ accountRouter.post('/account', (async (req, res) => {
     }
 }));
 
+accountRouter.post('/account/addTransaction', (async (req, res) => {
+    const transactionId = req.body.receiptId;
+    const value = parseInt(req.body.paid);
+    try {
+        await userService.addTransaction(email, transactionId, value);
+        console.log("transaction added successfully!");
+        res.redirect("/signIn");
+    } catch (error) {
+        debug(error.stack);
+    }
+}));
 
 async function signIn(email) {
     const url = 'mongodb://localhost:27017';
@@ -58,7 +55,9 @@ async function signIn(email) {
         document = { email: email };
         const response = await db.collection('users').findOne(document);
         //res.json(response);
-        return response.email;
+        if (response) {
+            return response.email;
+        };
     }
     catch (error) {
         debug(error.stack);
