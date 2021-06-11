@@ -12,19 +12,21 @@ const balanceRouter = express.Router();
  *       summary: Retrieves user balance by email
  *       tags: [User balance]
  *       parameters:
- *       -  name: "email"
- *          in: "path"
- *          type: "string"
- *          format: "email"
- *          required: true
- *          description: "the user's email address"
+ *          - name: email
+ *            in: path
+ *            required: true
+ *            description: the user's email address
+ *            content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Email'
  *       responses:
  *         200:
  *           description: Here is the user's balance
  *           content:
  *              application/json:
  *                  schema:
- *                      $ref: '#components/schemas/User'
+ *                      $ref: '#/components/schemas/User'
  */
 
 balanceRouter.get('/:email', async (req, res) => {

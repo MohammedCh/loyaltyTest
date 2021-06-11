@@ -14,74 +14,40 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use('/getByEmail', balanceRouter);
 app.use('/transaction', transactionRouter);
 
-// Start of section for openAPI documentation: (source:https://blog.logrocket.com/documenting-your-express-api-with-swagger/)
-/**
-*@openapi
-*   components:
-*       schemas:
-*           User:
-*               type: object
-*               required:
-*                   - email
-*               properties:
-*                   user:
-*                       type: string
-*                       description: Requester
-*                   balance:
-*                       type: integer
-*                       description: User's balance.
-*               example:
-*                   user: email@email.com
-*                   balance: 1000
-*           Receipt:
-*               type: object
-*               required:
-*                   - email
-*                   - receiptId
-*                   - paid
-*               properties:
-*                   receiptId:
-*                       type: string
-*                       description: unique identifier on receipt
-*                   email:
-*                       type: string
-*                       description: email address
-*                   paid:
-*                       type: integer
-*                       description: total DKK value of the receipt to receive right number of points
-*               example:
-*                   email: email@email.com
-*                   receiptId: "112"
-*                   paid: 1320
-*/
-const options = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "Swagger documentation for loyalty",
-            version: "0.1.0",
-            description:
-                "This is a simple application made with Express and documented with Swagger",
-            license: {
-                name: "Apache '2.0'",
-                url: "http://www.apage.org/licences/LICENSE-2.0.html",
-            },
-            contact: {
-                name: "Mo",
-                url: "mywebsite.com",
-                email: "info@email.com",
-            },
+// Start of section for openAPI documentation:
+// (sources:https://blog.logrocket.com/documenting-your-express-api-with-swagger/, https://github.com/Surnet/swagger-jsdoc/blob/master/docs/CLI.md)
+
+// Swagger definition
+const definition = {
+    openapi: "3.0.0",
+
+    info: {
+        title: "Swagger documentation for loyalty",
+        version: "0.1.0",
+        description: "This is a simple application made with Express and documented with Swagger",
+        license: {
+            name: "Apache '2.0'",
+            url: "http://www.apage.org/licences/LICENSE-2.0.html",
         },
-        servers: [
-            {
-                url: `http://localhost:${PORT}/`,
-            },
-        ],
     },
+
+    servers: [
+        {
+            url: `http://localhost:${PORT}/`,
+        },
+    ],
+};
+
+// Options for the swagger docs
+const options = {
+    definition,
     apis: [path.join(__dirname, 'app.js'), path.join(__dirname, '/src/routers/balanceRouter.js'), path.join(__dirname, '/src/routers/transactionRouter.js')],
 };
 
+// Initialize swagger-jsdoc -> returns validated swagger spec in json format
 const specs = swaggerJsdoc(options);
+
+// Serve swagger docs the way you like (Recommendation: swagger-tools)
 app.use(
     "/api-docs",
     swaggerUi.serve,

@@ -5,6 +5,49 @@ const express = require('express');
 const transactionRouter = express.Router();
 
 /**
+*@openapi
+*   components:
+*       schemas:
+*           Email:
+*               type: string
+*               format: email
+*               description: email address
+*           User:
+*               type: object
+*               required:
+*                   - email
+*               properties:
+*                   user:
+*                       type: string
+*                       description: Requester
+*                   balance:
+*                       type: integer
+*                       description: User's balance.
+*               example:
+*                   user: email@email.com
+*                   balance: 1000
+*           Receipt:
+*               type: object
+*               required:
+*                   - email
+*                   - receiptId
+*                   - paid
+*               properties:
+*                   receiptId:
+*                       type: string
+*                       description: unique identifier on receipt
+*                   email:
+*                       type: string
+*                       description: email address
+*                   paid:
+*                       type: integer
+*                       description: total DKK value of the receipt to receive right number of points
+*               example:
+*                   email: email@email.com
+*                   receiptId: "112"
+*                   paid: 1320
+*/
+/**
  * @openapi
  *   /transaction/add:
  *     post:
@@ -16,13 +59,13 @@ const transactionRouter = express.Router();
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#components/schemas/Receipt'
+ *                      $ref: '#/components/schemas/Receipt'
  *              application/xml:
  *                  schema:
- *                      $ref: '#components/schemas/Receipt'
+ *                      $ref: '#/components/schemas/Receipt'
  *              application/x-www-form-urlencoded:
  *                  schema:
- *                      $ref: '#components/schemas/Receipt'
+ *                      $ref: '#/components/schemas/Receipt'
  *              text/plain:
  *                  schema:
  *                      type: string
