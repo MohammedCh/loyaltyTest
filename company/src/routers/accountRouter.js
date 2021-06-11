@@ -11,18 +11,18 @@ accountRouter.route('/').get((req, res) => {
 
 let email;
 
-accountRouter.post('/account', (async (req, res) => {
-    email = req.body.email;
+accountRouter.get('/account', (async (req, res) => {
+    email = req.query.email;
     try {
         //console.log(email);
         const existingUser = await signIn(email);
-        if (req.body.email === existingUser) {
-            const balance = await userService.getUserBalanceByEmail(email);
-            res.render('account', { email, balance: balance });
+        if (email === existingUser) {
+            const userInfo = await userService.getUserBalanceByEmail(email);
+            res.render('account', { email, balance: userInfo.balance });
         }
         else {
             console.log("different");
-            res.send("User with " + req.body.email + " email doesn't exist!");
+            res.send("User with " + email + " email doesn't exist!");
         };
     } catch (error) {
         debug(error.stack);
@@ -34,7 +34,7 @@ accountRouter.post('/account/addTransaction', (async (req, res) => {
     const value = parseInt(req.body.paid);
     try {
         await userService.addTransaction(email, transactionId, value);
-        console.log("transaction added successfully!");
+        console.log("transaction API callled successfully!");
         res.redirect("/signIn");
     } catch (error) {
         debug(error.stack);

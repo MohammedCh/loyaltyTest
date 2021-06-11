@@ -11,7 +11,7 @@ function userService() {
 
     async function getUserBalanceByEmail(email) {
         try {
-            const response = await axios.get('http://localhost:8000/getByEmail/' + email);
+            const response = await axios.get('http://localhost:5000/getByEmail/' + email);
             //console.log(response.data);
             if (response) {
                 return response.data;
@@ -23,9 +23,7 @@ function userService() {
 
     async function addTransaction(email, receiptId, paid) {
         try {
-            const response = await axios.post('http://localhost:8000/transaction/add', { email: email, receiptId: receiptId, paid: paid });
-
-            console.log(response);
+            const response = await axios.post('http://localhost:5000/transaction/add', { email: email, receiptId: receiptId, paid: paid });
             if (response) {
                 return response;
             };
