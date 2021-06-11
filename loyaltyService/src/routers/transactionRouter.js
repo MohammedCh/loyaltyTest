@@ -4,6 +4,34 @@ const express = require('express');
 
 const transactionRouter = express.Router();
 
+/**
+ * @openapi
+ *   /transaction/add:
+ *     post:
+ *       summary: "Registers a receipt so user can earn loyalty points"
+ *       tags: [Earn points]
+ *       requestBody:
+ *          description: "receipt object"
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schemas/Receipt'
+ *              application/xml:
+ *                  schema:
+ *                      $ref: '#components/schemas/Receipt'
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#components/schemas/Receipt'
+ *              text/plain:
+ *                  schema:
+ *                      type: string
+ *       responses:
+ *         default:
+ *           description: receipt added successfully
+ *       x-codegen-request-body-name: body
+ */
+
 transactionRouter.post('/add', (async (req, res) => {
     const email = req.body.email;
     const transactionId = req.body.receiptId;
