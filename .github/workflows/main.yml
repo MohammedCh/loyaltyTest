@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: MohammedCh/actionsTest@vmain
+        uses: MohammedCh/actionsTest@main
         with:
           who-to-greet: 'Moeee'
       # Use the output from the `hello` step
