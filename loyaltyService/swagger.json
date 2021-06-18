@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000"
+      "url": "http://internatlIP:5000"
     }
   ],
   "paths": {
