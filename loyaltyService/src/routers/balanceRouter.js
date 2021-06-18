@@ -30,7 +30,11 @@ const balanceRouter = express.Router();
  */
 
 balanceRouter.get('/:email', async (req, res) => {
-    res.json(JSON.stringify({ user: req.params.email, balance: await calculateUserBalance(req.params.email) }));
+    console.log("hi");
+    accountBalance = await calculateUserBalance(req.params.email);
+    if (accountBalance) {
+        res.json(JSON.stringify({ user: req.params.email, balance: accountBalance }));
+    } else { res.send("No such user in DB") };
 });
 
 async function calculateUserBalance(email) {
