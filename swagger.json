@@ -1,0 +1,151 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swagger documentation for loyalty",
+    "version": "0.1.0",
+    "description": "This is a simple application made with Express and documented with Swagger",
+    "license": {
+      "name": "Apache '2.0'",
+      "url": "http://www.apage.org/licences/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/getByEmail/{email}": {
+      "get": {
+        "summary": "Retrieves user balance by email",
+        "tags": [
+          "User balance"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "the user's email address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Email"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Here is the user's balance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction/add": {
+      "post": {
+        "summary": "Registers a receipt so user can earn loyalty points",
+        "tags": [
+          "Earn points"
+        ],
+        "requestBody": {
+          "description": "receipt object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Receipt"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Receipt"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Receipt"
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "receipt added successfully"
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Email": {
+        "type": "string",
+        "format": "email",
+        "description": "email address"
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "user": {
+            "type": "string",
+            "description": "Requester"
+          },
+          "balance": {
+            "type": "integer",
+            "description": "User's balance."
+          }
+        },
+        "example": {
+          "user": "email@email.com",
+          "balance": 1000
+        }
+      },
+      "Receipt": {
+        "type": "object",
+        "required": [
+          "email",
+          "receiptId",
+          "paid"
+        ],
+        "properties": {
+          "receiptId": {
+            "type": "string",
+            "description": "unique identifier on receipt"
+          },
+          "email": {
+            "type": "string",
+            "description": "email address"
+          },
+          "paid": {
+            "type": "integer",
+            "description": "total DKK value of the receipt to receive right number of points"
+          }
+        },
+        "example": {
+          "email": "email@email.com",
+          "receiptId": "112",
+          "paid": 1320
+        }
+      }
+    }
+  },
+  "tags": []
+}
