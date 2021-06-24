@@ -11,4 +11,3 @@ jobs:
         - name: Hello world action step
           id: hello
           uses: MohammedCh/kongAction@main
-
