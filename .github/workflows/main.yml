@@ -12,8 +12,7 @@ jobs:
           run: |
             git config user.name github-actions
             git config user.email github-actions@github.com
-            git fetch
-            git checkout -m main swagger.json
+
         - name: Hello world action step
           id: hello
           uses: MohammedCh/kongAction@main
