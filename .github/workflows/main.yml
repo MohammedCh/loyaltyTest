@@ -6,7 +6,15 @@ jobs:
       runs-on: ubuntu-latest
       name: A job to say hello
       steps:
-        - uses: actions/checkout@v2
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: add file
+          run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git fetch
+            git checkout -m main swagger.json
         - name: Hello world action step
           id: hello
           uses: MohammedCh/kongAction@main
+
