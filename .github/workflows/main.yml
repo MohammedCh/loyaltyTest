@@ -11,3 +11,5 @@ jobs:
         - name: Hello world action step
           id: hello
           uses: MohammedCh/kongAction@main
+          with:
+            directory-filename: 'swagger.json'
