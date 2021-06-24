@@ -8,11 +8,6 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v2
-        - name: add file
-          run: |
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-
         - name: Hello world action step
           id: hello
           uses: MohammedCh/kongAction@main
