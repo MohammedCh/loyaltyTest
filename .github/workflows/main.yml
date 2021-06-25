@@ -18,5 +18,5 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            msg: echo "The msg was ${{ steps.hello.outputs.msg }}"
+            msg: echo "The diff is ${{ steps.hello.outputs.msg }}"
             check_for_duplicate_msg: false  # OPTIONAL
