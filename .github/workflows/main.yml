@@ -8,7 +8,7 @@ on:
 jobs:
   kong_diff_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: A job to show you the diff
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,7 +17,7 @@ jobs:
         uses: MohammedCh/kongAction@main
         with:
           directory-filename: 'swagger.json' # swagger location to be filled by user
-      - name: comment dif to PR
+      - name: Comment diff to PR
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
