@@ -1,10 +1,10 @@
 on:
   pull_request:
     paths:
-      - ${{ fileLocation }}
+      - "${{ fileLocation }}"
   push:
     paths:
-      - ${{ fileLocation }}
+      - "${{ fileLocation }}"
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
         id: hello
         uses: MohammedCh/kongAction@main
         with:
-          directory-filename: ${{ fileLocation }}
+          directory-filename: "${{ fileLocation }}"
       - name: comment PR
         uses: unsplash/comment-on-pr@master
         env:
