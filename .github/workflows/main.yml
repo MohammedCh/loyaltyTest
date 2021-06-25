@@ -1,28 +1,29 @@
 on:
   pull_request:
     paths:
-      - 'swagger.json' # to be filled by user
+      - 'swagger.json' # swagger location to be filled by user
   push:
     paths:
-      - 'swagger.json' # to be filled by user
+      - 'swagger.json' # swagger location to be filled by user
 jobs:
-  hello_world_job:
+  kong_diff_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Hello world action step
-        id: hello
+      - name: Create Kong config & diff
+        id: diff
         uses: MohammedCh/kongAction@main
         with:
-          directory-filename: ${{ env.fileLocation }}
-      - name: comment PR
+          directory-filename: 'swagger.json' # swagger location to be filled by user
+      - name: comment dif to PR
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: echo "The diff is ${{ steps.hello.outputs.msg }}"
+          msg: echo "The diff is ${{ steps.diff.outputs.msg }}"
           check_for_duplicate_msg: false  # OPTIONAL
 env:
-  fileLocation: 'swagger.json' # to be filled by user
+  fileLocation: 'swagger.json'
+  # env variables only work in steps, but not on "on.<pull_req|push>.paths" level
