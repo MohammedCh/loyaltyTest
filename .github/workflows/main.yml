@@ -1,10 +1,10 @@
 on:
   pull_request:
     paths:
-      - env.fileLocation # to be filled by user
+      - env.fileLocation
   push:
     paths:
-      - 'swagger.json' # to be filled by user
+      - env.fileLocation
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
         id: hello
         uses: MohammedCh/kongAction@main
         with:
-          directory-filename: 'swagger.json' # to be filled by user
+          directory-filename: env.fileLocation
       - name: comment PR
         uses: unsplash/comment-on-pr@master
         env:
