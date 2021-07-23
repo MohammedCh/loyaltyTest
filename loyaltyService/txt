@@ -1,5 +1,5 @@
 db.receipts.insertOne(
-   { "email" : "helloword1@email.com",
+   { "email" : 'helloword1@email.com',
      "receiptID" : 2,
      "DKKvalue" : 1100
    }
@@ -8,14 +8,13 @@ db.receipts.insertOne(
 myCursor = db.receipts.find( {} )
 
 db.receipts.aggregate([
-   { $match: { email: "helloword1" } },
-   { $group: { _id: "$email"}, total: { $sum: "$DKKvalue" }}
-])
-
-db.receipts.aggregate([
                      { $match: { email: "helloword1@email.com" } },
                      { $group: { _id: "$email", total: { $sum: "$DKKvalue" } } },
                      { $sort: { total: -1 } }
                    ])
 
 db.receipts.remove({})
+
+
+azure client id 31743d4c-9fce-4b9a-85a1-561f9580f635
+app secret: value: N85W.Auf_B-t01R88OD~I3-hk9xWwI3e~3 id:05992c59-8b35-436d-8af0-f759b45ed39a

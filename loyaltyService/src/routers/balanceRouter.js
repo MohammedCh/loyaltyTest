@@ -31,9 +31,9 @@ const balanceRouter = express.Router();
 
 balanceRouter.get('/:email', async (req, res) => {
     console.log("hi");
-    accountBalance = await calculateUserBalance(req.params.email);
+    let accountBalance = await calculateUserBalance(req.params.email);
     if (accountBalance) {
-        res.json(JSON.stringify({ user: req.params.email, balance: accountBalance }));
+        res.send({ user: req.params.email, balance: accountBalance });
     } else { res.send("No such user in DB") };
 });
 
@@ -48,12 +48,12 @@ async function calculateUserBalance(email) {
 
         db = client.db(dbName);
 
-        document = { email: email };
         const aggregatePoints = await db.collection('receipts').aggregate([
             { $match: { email: email } },
             { $group: { _id: "$email", total: { $sum: "$DKKvalue" } } },
             { $sort: { total: -1 } }
         ]).toArray();
+
         //res.json(response);
         if (aggregatePoints) {
             console.log(aggregatePoints[0].total);

@@ -1,32 +1,57 @@
 const express = require('express');
+const msal = require('@azure/msal-node');
 const debug = require('debug')('app:signUoRouter');
 const { MongoClient } = require('mongodb');
 const userService = require('../services/userService');
 
 const accountRouter = express.Router();
 
+const config = {
+    auth: {
+        clientId: "96634340-0077-4663-b1cc-17cd775732e2",
+        authority: "https://login.microsoftonline.com/common",
+        clientSecret: "kj_0W77N2z2.JQN_OS2cqH~2ZSb~OYR7s6"
+    },
+    system: {
+        loggerOptions: {
+            loggerCallback(loglevel, message, containsPii) {
+                console.log(message);
+            },
+            piiLoggingEnabled: false,
+            logLevel: msal.LogLevel.Verbose,
+        }
+    }
+};
+// Create msal application object
+const cca = new msal.ConfidentialClientApplication(config);
 accountRouter.route('/').get((req, res) => {
-    res.render('signIn');
+    const authCodeUrlParameters = {
+        scopes: ["user.read"],
+        redirectUri: "http://localhost:4000/signIn/redirect",
+    };
+
+    // get url to sign user in and consent to scopes needed for application
+    cca.getAuthCodeUrl(authCodeUrlParameters).then((response) => {
+        res.redirect(response);
+    }).catch((error) => console.log(JSON.stringify(error)));
 });
 
-let email;
+let email = "legikol908@activesniper.com";
 
-accountRouter.get('/account', (async (req, res) => {
-    email = req.query.email;
-    try {
-        //console.log(email);
-        const existingUser = await signIn(email);
-        if (email === existingUser) {
-            const userInfo = await userService.getUserBalanceByEmail(email);
-            res.render('account', { email, balance: userInfo.balance });
-        }
-        else {
-            console.log("different");
-            res.send("User with " + email + " email doesn't exist!");
-        };
-    } catch (error) {
-        debug(error.stack);
-    }
+accountRouter.get('/redirect', (async (req, res) => {
+    const tokenRequest = {
+        code: req.query.code,
+        scopes: ["user.read"],
+        redirectUri: "http://localhost:4000/signIn/redirect",
+    };
+    cca.acquireTokenByCode(tokenRequest).then(async (response) => {
+        console.log("\nResponse: \n:", response);
+        const userInfo = await userService.getUserBalanceByEmail(email);
+        res.render('account', { email, balance: userInfo.balance });
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).send(error);
+    });
 }));
 
 accountRouter.post('/account/addTransaction', (async (req, res) => {
