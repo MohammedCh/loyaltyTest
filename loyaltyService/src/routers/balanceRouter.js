@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const debug = require('debug')('app:getUserBalance');
+const auth = require('../authMiddleware/auth');
 
 const express = require('express');
 
@@ -29,7 +30,7 @@ const balanceRouter = express.Router();
  *                      $ref: '#/components/schemas/User'
  */
 
-balanceRouter.get('/:email', async (req, res) => {
+balanceRouter.get('/:email', auth, async (req, res) => {
     console.log("hi");
     let accountBalance = await calculateUserBalance(req.params.email);
     if (accountBalance) {

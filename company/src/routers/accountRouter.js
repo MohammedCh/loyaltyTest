@@ -8,9 +8,9 @@ const accountRouter = express.Router();
 
 const config = {
     auth: {
-        clientId: "96634340-0077-4663-b1cc-17cd775732e2",
+        clientId: "177b1e7b-2b95-41fc-8ba8-423a06deb464",
         authority: "https://login.microsoftonline.com/common",
-        clientSecret: "kj_0W77N2z2.JQN_OS2cqH~2ZSb~OYR7s6"
+        clientSecret: "BmLK.JOH.ZF5783t-L41v507XBt~j89Gh2"
     },
     system: {
         loggerOptions: {
@@ -36,7 +36,7 @@ accountRouter.route('/').get((req, res) => {
     }).catch((error) => console.log(JSON.stringify(error)));
 });
 
-let email = "legikol908@activesniper.com";
+let email;
 
 accountRouter.get('/redirect', (async (req, res) => {
     const tokenRequest = {
@@ -46,8 +46,11 @@ accountRouter.get('/redirect', (async (req, res) => {
     };
     cca.acquireTokenByCode(tokenRequest).then(async (response) => {
         console.log("\nResponse: \n:", response);
-        const userInfo = await userService.getUserBalanceByEmail(email);
-        res.render('account', { email, balance: userInfo.balance });
+        email = response.account.username;
+        userService.callWebApi(email, response.accessToken, (oboResponse) => {
+            console.log(oboResponse);
+            res.render('account', { email, balance: oboResponse });
+        });
     }).catch((error) => {
         console.log(error);
         res.status(500).send(error);

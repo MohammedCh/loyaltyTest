@@ -1,5 +1,5 @@
 db.receipts.insertOne(
-   { "email" : 'helloword1@email.com',
+   { "email" : 'legikol908@activesniper.com',
      "receiptID" : 2,
      "DKKvalue" : 1100
    }
